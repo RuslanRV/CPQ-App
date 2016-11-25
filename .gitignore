@@ -1,0 +1,7 @@
+.DS_Store
+.project
+*.sublime-project
+*.sublime-workspace
+config
+.git
+debug

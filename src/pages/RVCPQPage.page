@@ -1,0 +1,54 @@
+<apex:page docType="html-5.0" showHeader="true" sidebar="true" controller="RVCPQController">
+<html ng-app="theApp">
+<head>
+   <meta charset="utf-8"/>
+   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <script type="text/javascript">
+      var remote_action_cat = '{!$RemoteAction.RVCPQController.categoriesOfPriceList}';
+      var remote_action_prod = '{!$RemoteAction.RVCPQController.productsOfPriceListAndCategory}';
+      var remote_action_add_prod_to_cart = '{!$RemoteAction.RVCPQController.addProductToCartWith}';
+      var remote_action_cart_items_of_quote = '{!$RemoteAction.RVCPQController.cartItemsOfQuote}';
+    </script>
+    
+    <apex:stylesheet value="{!URLFOR($Resource.res, 'bootstrap.min.css')}" />
+    <apex:includeScript value="{!URLFOR($Resource.res, 'angular.min.v1.3.11.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.RVMainJS)}" />
+</head>
+<body class="container" ng-controller="ctrl">
+
+    <c:cpq_warning_message warningMessage="{{warningMessage}}"/>
+
+    <apex:pageBlock >
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default {{btnActive[cat.categoryId]}}" ng-click="submit(cat)" ng-repeat="cat in categories | filter:query">{{cat.Name}}</button>
+      </div>
+      <div style="float: right;">        
+        <span>Cart <span class="badge">{{productsInCart}}</span></span>
+      </div>
+    </apex:pageBlock>
+     
+    <apex:pageBlock >
+          <div ng-show="displayProducts">
+            <table class="table table-bordered">
+               <tr>
+                 <th>Product Id</th>
+                 <th>Product Name</th>
+                 <th>Action</th>
+               </tr>
+               <tr ng-repeat="pr in products | filter:query">          
+                 <td>{{pr.ProductId__c}}</td>
+                 <td>{{pr.Name}}</td>
+                 <td>
+                   <input type="text" value="1" /> 
+                   <button class="btn btn-primary" type="button" ng-click='addToCart(pr)'>Add to Cart</button>
+                 </td>
+               </tr>
+            </table>
+          </div>
+     </apex:pageBlock>   
+</body>
+
+
+</html>
+</apex:page>

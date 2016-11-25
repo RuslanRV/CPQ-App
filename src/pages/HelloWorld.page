@@ -1,0 +1,41 @@
+<apex:page showHeader="true" applyHtmlTag="true" docType="html-5.0" controller="AngularWithVfPage">
+ 
+<head>
+   <meta charset="utf-8"/>
+   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    
+   <link rel="stylesheet" href="{!$Resource.resources}/bootstrap.min.css"/>
+   <script src="{!$Resource.resources}/angular.min.v1.3.11.js"></script>
+   <script>      
+    
+    var App = angular.module('theApp', []);  
+    App.controller('ctrl', ['$scope', '$window', function($scope, $window){
+        $scope.contacts = {!contacts}
+        $scope.showAlert = function() {
+            $window.alert('Loaded ' + Object.keys($scope.contacts).length + ' contacts');
+        };
+    }]);
+   </script>
+</head>
+<body ng-app="theApp" class="container" ng-controller="ctrl">
+   
+    <apex:pageBlock >
+       <button ng-click="showAlert()">Count contacts</button>
+    </apex:pageBlock>
+     
+    <apex:pageBlock >
+        <table class="table table-bordered">
+             <tr>
+               <th>Id</th>
+               <th>Name</th>
+               <th>Email</th>
+             </tr>
+             <tr ng-repeat="cont in contacts | filter:query">          
+               <td>{{cont.Id}}</td>
+               <td>{{cont.Name}}</td>
+               <td>{{cont.Email}}</td>
+             </tr>
+       </table>
+     </apex:pageBlock>
+</body>
+</apex:page>

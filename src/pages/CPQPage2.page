@@ -1,0 +1,40 @@
+<apex:page docType="html-5.0" showHeader="true" sidebar="true">
+<html ng-app="theApp">
+<head>
+   <meta charset="utf-8"/>
+   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    
+    <apex:stylesheet value="{!URLFOR($Resource.res, 'bootstrap.min.css')}" />
+    <apex:includeScript value="{!URLFOR($Resource.res, 'angular.min.v1.3.11.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.res, 'jquery-3.1.1.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.res, 'main2.js')}" />
+</head>
+<body class="container" ng-controller="ctrl">
+
+    <c:cpq_warning_message warningMessage="{{warningMessage}}"/>
+
+    <apex:pageBlock >
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default {{btnActive[cat.categoryId]}}" ng-click="submit(cat)" ng-repeat="cat in categories | filter:query">{{cat.categoryName}}</button>
+      </div>
+    </apex:pageBlock>
+     
+    <apex:pageBlock >
+          <div ng-show="displayProducts">
+            <table class="table table-bordered">
+               <tr>
+                 <th>Product Id</th>
+                 <th>Product Name</th>
+               </tr>
+               <tr ng-repeat="pr in products | filter:query">          
+                 <td>{{pr.productId}}</td>
+                 <td>{{pr.productName}}</td>
+               </tr>
+            </table>
+          </div>
+     </apex:pageBlock>   
+</body>
+
+
+</html>
+</apex:page>

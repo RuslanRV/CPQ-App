@@ -1,0 +1,191 @@
+<apex:page docType="html-5.0" controller="RVCPQController" applyHtmlTag="false" applyBodyTag="false"
+           showHeader="false" sidebar="false" standardStylesheets="false">
+
+<head>
+        <title>honeywell</title>
+        <apex:stylesheet value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"/>
+        <apex:stylesheet value="{!URLFOR($Resource.HNWL_TEST_PAGE, 'lib/style/main.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.HNWL_TEST_PAGE, 'lib/style/notification.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.HNWL_TEST_PAGE, 'lib/style/font-awesome/css/font-awesome.css')}"/>
+    </head>
+    <body ng-app="HNWL_CPQ" ng-controller="CatalogCtrl as catalog">
+
+    <div ng-view="">
+    <nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#"><img height="30px" src="http://dctkc.com/wp-content/uploads/2015/04/Honeywell-logo-shadow.png" /></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">My Store <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">Help</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> 
+              <span class="glyphicon glyphicon-shopping-cart"></span> {{catalog.cartLineItems.length}} - Items<span class="caret"></span></a>
+          <ul class="dropdown-menu dropdown-cart" role="menu">
+              <li ng-repeat="cartItem in catalog.cartLineItems track by $index ">
+                  <span class="item">
+                    <span class="item-left">
+                        <img ng-src="{{cartItem.imageUrl__c}}" alt="" />
+                        <span class="item-info">
+                            <span>{{cartItem.name}}</span>
+                            <span>${{cartItem.listPrice}}</span>
+                        </span>
+                    </span>
+                    <span class="item-right">
+                        <button class="btn btn-xs btn-danger pull-right" ng-click="catalog.removeProductFromCart($index)">x</button>
+                    </span>
+                </span>
+              </li>
+              <li class="divider"></li>
+              <li><a class="text-center" href="">View Cart</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+    
+    <div class="container-fluid content-container">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+        
+          <div class="panel panel-default">
+
+          <div class="panel-body">
+            <div class="input-group">
+              <input type="search" placeholder="search product" class="search-product form-control"/>
+                  <span class="input-group-btn">
+                    <button class="btn btn-default clear-search-result-btn" type="button" disabled="disabled">×</button>
+                  </span>
+            </div><!-- /input-group -->
+            <small id="searchedProductCounts" class=""></small>
+          </div>
+          <div class="panel-heading lw-afterfirst-panel-heading">
+            <h3 class="panel-title">Categories</h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group" id="categoriesList">
+              <li class="list-group-item category-list-item-shelves" ng-repeat="cat in catalog.categories">
+                 <a data-categoryindex="shelves" href="#" ng-click="catalog.getProductsByCategory(cat.id, catalog.searchText)" 
+                 class="category-link-shelves category-link btn-block">{{cat.name}} <span class="badge lw-category-badge">{{cat.productCount}}</span> 
+                 <i class="glyphicon glyphicon-arrow-right pull-right"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        </div>
+        <div class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 main">
+          
+        <div class="panel panel-default">
+            <div class="panel-body">
+              <!-- <div class="row">
+                    <div class="col-md-3" ng-repeat="product in catalog.selectedProducts">
+                        <div class="thumbnail">
+                            <img src="{{product.imageUrl}}"/>
+                            <div class="caption">
+                                <h4>{{product.name}}</h4>
+                                <p><strike>Euro 150,00</strike>&nbsp;{{product.listPrice}}</p>
+                                <a class="btn btn-primary" href="#">View</a>
+                                <a class="btn btn-success" href="#">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div> -->
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Product Code</th>
+                      <th>Product Id</th>
+                      <th>Value</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="product in catalog.selectedProducts">
+                      <td><img ng-src="{{product.imageUrl}}" alt="image" /></td>
+                      <td>{{product.name}}</td>
+                      <td>{{product.productCode}}</td>
+                      <td>{{product.id}}</td>
+                      <td>${{product.listPrice}}</td>
+                      <td>
+                          <button type="button" ng-show="!product.loading" ng-click="catalog.addProductToCart(product)" class="btn btn-primary btn-md">Add To Cart</button>
+                          <span ng-show="product.loading">loading</span>
+                      </td>
+                    </tr>
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+                          </div>
+            </div>
+          </div>
+        </div>
+
+        
+    </div>
+    </body>
+    <!-- Underscore Js Lib. -->
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"/>
+
+    <!-- Angular Js Lib. -->
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"/>
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-route.min.js"/>
+    <apex:includeScript value="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"/>
+    <apex:includeScript value="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"/>
+    <apex:includeScript value="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.2.0.js"/>
+    <apex:includeScript value="https://code.jquery.com/jquery-1.12.4.min.js"/>
+    <apex:includeScript value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"/>
+    
+    <!-- Angular Modules-->
+    <apex:includeScript value="{!URLFOR($Resource.HNWL_TEST_PAGE, 'app/catalog/module.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.HNWL_TEST_PAGE, 'app/mini-cart/module.js')}"/>
+    
+    <!-- Angular App Init-->
+    <apex:includeScript value="{!URLFOR($Resource.HNWL_TEST_PAGE, 'app/app.js')}" />
+    
+    <!-- Angular Factories & Services -->
+    <apex:includeScript value="{!URLFOR($Resource.HNWL_TEST_PAGE, 'app/common/services/RemoteService.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.HNWL_TEST_PAGE, 'app/common/services/NotificationService.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.HNWL_TEST_PAGE, 'app/catalog/services/CatalogService.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.HNWL_TEST_PAGE, 'app/mini-cart/services/MiniCartService.js')}"/>
+    
+    
+    <!-- Angular Controllers -->
+    <apex:includeScript value="{!URLFOR($Resource.HNWL_TEST_PAGE, 'app/catalog/controllers/CatalogCtrl.js')}"/>
+    
+    
+    
+    <script>
+    angular.module('HNWL_CPQ').service('BaseConfigService', BaseConfigService);
+    function BaseConfigService() {        
+        var service = this;
+        //var quoteNumber = 'Q-00000000';
+        //var priceListId = 'a200Y0000008byW';
+        service.RemoteActions = {
+            getCategoriesOfPriceList: '{!$RemoteAction.RVCPQController.categoriesOfPriceList}',
+            getProductsOfPriceListAndCategory : '{!$RemoteAction.RVCPQController.productsOfPriceListAndCategory}',            
+            addProductToCartWith : '{!$RemoteAction.RVCPQController.addProductToCartWith}',
+            //cartItemsOfQuote : '{!$RemoteAction.RVCPQController.cartItemsOfQuote}'
+        };
+    }
+    </script>    
+
+</apex:page>

@@ -1,0 +1,27 @@
+<apex:page docType="html-5.0" title="Create Account">
+    
+    <apex:remoteObjects >
+        <apex:remoteObjectModel name="My_Custom_Object__c" fields="Id,Name,City__c"/>
+    </apex:remoteObjects>
+    
+    <div class="mypage">
+        Account Name:
+        <input type="text" id="nn"/>
+        <button onclick="createAccount()">Create Account</button>
+    </div>
+    
+    <script>
+        function createAccount() {
+            var nn = document.getElementById("nn").value;
+            var account = new SObjectModel.My_Custom_Object__c();
+            account.create({Name: nn, City__c: 'super'}, function(error, records) {
+                if (error) {
+                    alert(error.message);
+                } else {
+                   //sforce.one.navigateToSObject(records[0]);
+                }
+            });
+        }
+    </script>
+    
+</apex:page>
