@@ -52,6 +52,6 @@ public with sharing class RVCPQController {
 	@RemoteAction
 	public static List<Apttus_Config2__LineItem__c> cartItemsOfQuote(String quoteNumber) {
 		//return RVCPQService.lineItemsOfCart(cartId);
-		return null;
+		return new List<Apttus_Config2__LineItem__c>();
 	}
 }
