@@ -46,7 +46,6 @@
         <members>DandBCompany</members>
         <members>DebugInfo__c</members>
         <members>DesignWorkItem__c</members>
-        <members>DeveloperWorkItem__c</members>
         <members>DuplicateRecordItem</members>
         <members>DuplicateRecordSet</members>
         <members>EmailMessage</members>
