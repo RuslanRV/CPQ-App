@@ -3,6 +3,15 @@
     <property file="build.properties"/>
     <property environment="env"/>
 
+    <target name="deploySkipAllTests">
+      <sf:deploy username="${sf.username}" 
+        password="${sf.password}" 
+        serverurl="${sf.serverurl}" 
+        runAllTests="false"
+        logType="Detail"
+        deployRoot="src"/>
+    </target>
+    
     <target name="deployRunAllTests">
       <sf:deploy username="${sf.username}" 
         password="${sf.password}" 
